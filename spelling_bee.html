@@ -1,10 +1,8 @@
-
 <!DOCTYPE html>
-
-
-
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
     <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
         <title>Spelling Bee</title>
         <link rel="stylesheet" href = "spelling_bee.css">
         <link rel="icon" href="/cute_bee.png" type="image/icon type">
@@ -16,7 +14,7 @@
         <!-- JSZip -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js" integrity="sha512-xQBQYt9UcgblF6aCMrwU1NkVA7HCXaSN2oq0so80KO+y68M+n64FOcqgav4igHe6D5ObBLIf68DWv+gfBowczg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
-    <body onload="get_valid_words()" onkeydown="input_from_keyboard(event)">
+    <body onkeydown="input_from_keyboard(event)">
         <h1> Spelling Bee Game</h1>
 
         <!-- NOTIFICATIONS -->
@@ -41,7 +39,8 @@
         <!-- <div class="cursor" style="height:40px; text-align:center; display:flex-inline; justify-content:center; margin-bottom:360px;"> -->
 
         <!-- HEXAGON GRID -->
-          <div style="display:flex; flex-direction:column; align-items:center;">
+          <!--<div id="loading">Loading ...</div>-->
+          <div id="divHexGrid">
             <ul id="hexGrid"></ul>
 
             <div class="button_container">
@@ -63,7 +62,66 @@
               </div>
         </div>
 
+    <script type="text/javascript" src="spelling_bee.js"></script>
+    <script type="text/javascript">
+
+        var QueryString = function () {
+            // This function is anonymous, is executed immediately and
+            // the return value is assigned to QueryString!
+            var query_string = {};
+            var query = window.location.search.substring(1);
+            var vars = query.split("&");
+            for (var i=0;i<vars.length;i++) {
+                var pair = vars[i].split("=");
+                    // If first entry with this name
+                if (typeof query_string[pair[0]] === "undefined") {
+                  query_string[pair[0]] = decodeURIComponent(pair[1]);
+                    // If second entry with this name
+                } else if (typeof query_string[pair[0]] === "string") {
+                  var arr = [ query_string[pair[0]],decodeURIComponent(pair[1]) ];
+                  query_string[pair[0]] = arr;
+                    // If third or later entry with this name
+                } else {
+                  query_string[pair[0]].push(decodeURIComponent(pair[1]));
+                }
+            }
+            return query_string;
+        }();
+
+        $(document).ready(function () {
+        // hide and show relevant sections
+        //$('#divHexGrid').hide();
+        //$('#loading').show();
+        // fetch the data
+        if(typeof window.fetch === "function") {
+          fetch('words2.json.zip')
+          .then(function (response) {
+            if (response.status === 200 || response.status === 0) {
+              return Promise.resolve(response.arrayBuffer())
+            } else {
+              return Promise.reject(new Error(response.statusText))
+            }
+          })
+          .then(JSZip.loadAsync)
+          .then(function (zip) {
+            return zip.file("words2.json").async("string");
+          })
+          .then(function success(data) {
+            // populate dictionary
+            var words_json = JSON.parse(data);
+            get_valid_words2(words_json, QueryString.required, QueryString.optional);
+            // hide and show
+            //$('#divHexGrid').show();
+            //$('#loading').hide();
+
+          }, function error(e) {
+            alert(e);
+          });
+        } else {
+          $('#loading').text('This browser does not support the Fetch API.  Please use Firefox or Chrome to use this page.');
+        }
+        });
+    </script>
+
     </body>
 </html>
-
-<script type="text/javascript" src="spelling_bee.js"></script>
