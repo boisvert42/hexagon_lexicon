@@ -11,6 +11,25 @@ import zipfile
 def sort_string(s):
     return ''.join(sorted(s))
 
+def is_good_word(required, optional, word):
+    # Test if the word is valid
+    if len(word) < 4:
+        return False
+    elif required not in word:
+        return False
+    elif not set(word).issubset(set(required+optional)):
+        return False
+    return True
+
+def possible_words(required, optional, word_list):
+    # Get the possible words in word_list from the starting setup
+    words = set()
+    for word in word_list:
+        if is_good_word(required, optional, word):
+            words.add(word)
+    return words
+    
+
 #%%
 
 # Read in the word list
@@ -39,9 +58,26 @@ for word in words:
     if len(word) == 7 and len(set(word)) == 7:
         isograms.add(sort_string(word))
         
+#%% Go through these to determine which required letters are "good"
+# A "good" set is defined as one that makes no less than 20 but no more than 60 words
+MIN_WORDS = 20
+MAX_WORDS = 60
+ctr = 0
+good_starters = set()
+for word in isograms:
+    for required in word:
+        optional = word.replace(required, '')
+        possibles = possible_words(required, optional, words)
+        if len(possibles) >= 20 and len(possibles) <= 60:
+            good_starters.add((required, optional))
+    ctr += 1
+    if ctr % 100 == 0:
+        print(ctr)
+
+        
 #%% Make a JSON file combining this information
 JSON_FILE = 'words2.json'
-d = {'pangrams': list(isograms), 'words': list(words)}
+d = {'starters': list(good_starters), 'words': list(words)}
 outfile = os.path.join('..', JSON_FILE)
 with open(outfile, 'w') as fid:
     json.dump(d, fid)
