@@ -12,6 +12,9 @@
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
         <script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
         <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Roboto+Slab:300,400,500,600,700&display=swap" rel="stylesheet">
+
+        <!-- JSZip -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js" integrity="sha512-xQBQYt9UcgblF6aCMrwU1NkVA7HCXaSN2oq0so80KO+y68M+n64FOcqgav4igHe6D5ObBLIf68DWv+gfBowczg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
     <body onload="get_valid_words()" onkeydown="input_from_keyboard(event)">
         <h1> Spelling Bee Game</h1>
@@ -28,7 +31,7 @@
             <p id="invalid-word" class="notifications">Invalid Word</p>
             <p id="miss-center" class="notifications">Missing Center Letter</p>
           </div>
-        
+
         </div>
 
         <!-- INPUT WORD -->
@@ -36,20 +39,20 @@
             <p id="inputword" style="display:flex;"> <span id="testword"></span><span id="cursor">|</span></p>
         </div>
         <!-- <div class="cursor" style="height:40px; text-align:center; display:flex-inline; justify-content:center; margin-bottom:360px;"> -->
-        
+
         <!-- HEXAGON GRID -->
           <div style="display:flex; flex-direction:column; align-items:center;">
             <ul id="hexGrid"></ul>
-        
+
             <div class="button_container">
               <button id="submit_button" type="button" class="button" onclick="submitWord()">Enter</button>
               <button id="shuffle_button" type="button" class="button" onclick="shuffleLetters()">
                 <img src="shuffle_icon.png" style="width:1.2em">
-              
+
               </button>
               <button id="delete_button" type="button" class="button" onclick="deleteLetter()">Delete</button>
                 <!--<i style="align-self:center;"></i>-->
-              
+
             </div>
         </div>
         <div class="container" style="height:400px; justify-content:normal;" id="scoreboard">
@@ -59,7 +62,7 @@
               <div id="discoveredText" >
               </div>
         </div>
-         
+
     </body>
 </html>
 
