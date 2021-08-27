@@ -327,7 +327,7 @@ function calculateWordScore(input, isPangram) {
   let returnScore = 1;
   if(len > 4) {
     if(isPangram) {
-      returnScore = len + 7;
+      returnScore = 17;
 
     }else{
       returnScore = len;
