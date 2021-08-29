@@ -95,7 +95,6 @@ function makeValidWords() {
     document.getElementById('validWords').innerHTML = html;
     // Add a listener to the checkboxes
     var checkboxes = document.getElementsByClassName('hex-checkbox');
-    console.log(checkboxes);
     for (var i=0; i < checkboxes.length; i++) {
       checkboxes[i].addEventListener('change', function() {
           makeExcl();
@@ -218,7 +217,8 @@ function initialize_score(){
 //Creates the hexagon grid of 7 letters with middle letter as special color
 function initialize_letters(){
 
-    var hexgrid = document.getElementById('hexGrid')
+    var hexgrid = document.getElementById('hexGrid');
+    hexGrid.innerHTML = '';
     for(var i=0; i<letters.length; i++){
         var char = letters[i];
 
