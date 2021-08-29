@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+        <title>Hexagon Lexicon - Build Your Own</title>
+        <!-- Skeleton CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/skeleton/2.0.4/skeleton.min.css" integrity="sha512-EZLkOqwILORob+p0BXZc+Vm3RgJBOe1Iq/0fiI7r/wJgzOFZMlsqTa29UEl6v6U6gsV4uIpsNZoV32YZqrCRCQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <link rel="stylesheet" href = "spelling_bee2.css">
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src = "https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+        <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400|Roboto+Slab:300,400,500,600,700&display=swap" rel="stylesheet">
+
+        <!-- JSZip -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js" integrity="sha512-xQBQYt9UcgblF6aCMrwU1NkVA7HCXaSN2oq0so80KO+y68M+n64FOcqgav4igHe6D5ObBLIf68DWv+gfBowczg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Hexagon Lexicon - Build Your Own</h2>
+
+            <form action="." id="build-form" autocomplete="off">
+                <div class="row">
+                   <div class="six columns">
+                     <label for="required">Required Letter</label>
+                     <input class="u-full-width" name="required" id="required" value="d" />
+                   </div>
+                   <div class="six columns">
+                     <label for="optional">Optional Letters</label>
+                     <input class="u-full-width" name="optional" id="optional" value="abcefg" />
+                   </div>
+                 </div>
+                 <input class="button-primary" type="submit" value="Generate" />
+            </form>
+
+            <div id="divHexGrid">
+              <ul id="hexGrid"></ul>
+            </div>
+
+            <div class="row" id="results">
+            </div>
+
+        </div>
+
+    <script type="text/javascript" src="spelling_bee.js"></script>
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+        // hide and show relevant sections
+        //$('#divHexGrid').hide();
+        //$('#loading').show();
+        // fetch the data
+        if(typeof window.fetch === "function") {
+          fetch('words2.json.zip')
+          .then(function (response) {
+            if (response.status === 200 || response.status === 0) {
+              return Promise.resolve(response.arrayBuffer())
+            } else {
+              return Promise.reject(new Error(response.statusText))
+            }
+          })
+          .then(JSZip.loadAsync)
+          .then(function (zip) {
+            return zip.file("words2.json").async("string");
+          })
+          .then(function success(data) {
+            // populate dictionary
+            var words_json = JSON.parse(data);
+            window.words_json = words_json;
+            // hide and show
+            //$('#divHexGrid').show();
+            //$('#loading').hide();
+
+            // Handle form submission
+            $('#build-form').submit(function(event) {
+                // Don't actually submit the form
+                event.preventDefault();
+                var required = $('input[name=required]').val().toUpperCase();
+                var optional = $('input[name=optional]').val().toUpperCase();
+                create_results(window.words_json, required, optional);
+            });
+
+          }, function error(e) {
+            alert(e);
+          });
+        } else {
+          $('#loading').text('This browser does not support the Fetch API.  Please use Firefox or Chrome to use this page.');
+        }
+        });
+    </script>
+
+    </body>
+</html>

@@ -4,18 +4,9 @@ var discoveredWords =[];
 var totalScore = 0;
 var pangram = "";
 var centerLetter = "";
-var cursor = true;
 var numFound = 0;
 var maxscore = 0;
-setInterval(() => {
-  if(cursor) {
-    document.getElementById('cursor').style.opacity = 0;
-    cursor = false;
-  }else {
-    document.getElementById('cursor').style.opacity = 1;
-    cursor = true;
-  }
-}, 600);
+
 
 // Adapted from https://stackoverflow.com/a/19303725
 function kindaRandom(seed) {
@@ -38,8 +29,8 @@ function isGoodWord(required, optional, word) {
 }
 
 // function to test if a word is a "pangram"
-function isPangram(word) {
-    return (word.length == 7 && new Set(word).size == 7);
+function is_pangram(word) {
+    return (new Set(word).size == 7);
 }
 
 function get_todays_starter(starters) {
@@ -53,13 +44,126 @@ function get_todays_starter(starters) {
     return starter;
 }
 
-function get_valid_words2(words_json, required='', optional='') {
+function makeURL() {
+    var thisURL = document.URL;
+    var required = window.thisObject.required;
+    var optional = window.thisObject.optional;
+    var excl = window.thisObject.excl || '';
+    var lastSlash = thisURL.lastIndexOf('/');
+    var indexURL = thisURL.substring(0, lastSlash) + '/index.html';
+    var newURL = `${indexURL}?required=${required}&optional=${optional}&excl=${excl}`;
+    document.getElementById('url').innerHTML = `<a href="${newURL}" target="_blank">${newURL}</a>`;
+}
+
+function makeExcl() {
+    // Add to the excluded words based on checkboxes
+    var checkboxes = document.getElementsByClassName('hex-checkbox');
+    var excl = [];
+    for (var i=0; i < checkboxes.length; i++) {
+        if (checkboxes[i].checked) {
+            excl.push(checkboxes[i].name);
+        }
+    }
+    console.log(excl);
+    window.thisObject.excl = btoa(JSON.stringify(excl));
+    makeURL();
+}
+
+function makeValidWords() {
+    // Make six columns with checkboxes for all the words
+    var ctr = 0;
+    var html = '';
+    validWords.sort().forEach( function (word) {
+        if (ctr == 0) {
+            html += '<div class="row">\n';
+        }
+        html += `
+        <div class="two columns">
+            <label class="example">
+              <input type="checkbox" id="${word}" name="${word}" class="hex-checkbox">
+              <span class="label-body">${word}</span>
+            </label>
+        </div>`;
+        if (ctr == 5) {
+            html += '</div>\n';
+        }
+        ctr += 1;
+        if (ctr == 6) {
+            ctr = 0;
+        }
+    });
+    document.getElementById('validWords').innerHTML = html;
+    // Add a listener to the checkboxes
+    var checkboxes = document.getElementsByClassName('hex-checkbox');
+    console.log(checkboxes);
+    for (var i=0; i < checkboxes.length; i++) {
+      checkboxes[i].addEventListener('change', function() {
+          makeExcl();
+      });
+    }
+}
+
+function create_results(words_json, required='', optional='') {
+    var ret = get_valid_words(words_json, required, optional);
+    if (!ret) {
+        return false;
+    }
+
+    required = required.toLowerCase();
+    optional = optional.toLowerCase();
+
+    window.thisObject = {'required': required, 'optional': optional};
+    var numberPangrams = validWords.filter(word => is_pangram(word)).length;
+    var html = `
+        <div class="row">
+            <span id="url">
+            </span>
+        </div>
+        <div class="row">Total words: ${validWords.length}</div>
+        <div class="row">Total pangrams: <span id="numPangrams">${numberPangrams}</span></div>
+        <div class="row">Max score: <span id="numPangrams">${maxscore}</span></div>
+        <div class="row">Allowable words (check a box to exclude a word)</div>
+        <div id="validWords">
+        </div>
+    `;
+    document.getElementById('results').innerHTML = html;
+    makeURL();
+    initialize_letters();
+    makeValidWords();
+}
+
+function validate_parameters(required, optional) {
+    var combined = required + optional;
+    // required length must be 1
+    if (required.length !== 1) {
+        return '"Required" parameter must be a single character';
+    } else if (optional.length !== 6) {
+        return '"Optional" parameter must be six letters';
+    } else if (!is_pangram(combined)) {
+        return 'Inputs are not all unique letters';
+    } else if (combined.search(/[^a-z]/) != -1) {
+        return 'Not all inputs are letters';
+    }
+    return '';
+}
+
+function get_valid_words(words_json, required='', optional='', excl=new Set()) {
     // Start a game
     const starters = words_json['starters'];
     const words = words_json['words'];
+    // Reset all the global variables
+    letters = [];
+    validWords = [];
+    maxScore = 0;
     // TODO: read from query parameters to get these values
     if (required && optional) {
-        // validate these
+        required = required.toLowerCase();
+        optional = optional.toLowerCase();
+        var ret = validate_parameters(required, optional);
+        if (ret) {
+            alert(ret);
+            return false;
+        }
     }
     else {
         var starter = get_todays_starter(starters);
@@ -73,15 +177,16 @@ function get_valid_words2(words_json, required='', optional='') {
             letters.push(required);
         }
     }
+    console.log(excl);
     // Go through the words to populate validWords, pangram, maxScore
     words.forEach( function(w) {
-        if (isGoodWord(required, optional, w)) {
+        if (isGoodWord(required, optional, w) && !excl.has(w)) {
             validWords.push(w);
             if (w.length == 4) {
                 maxscore += 1;
             }
-            else if (isPangram(w)) {
-                maxscore += 17;
+            else if (is_pangram(w)) {
+                maxscore += w.length + 7;
                 pangram = w;
             }
             else if (w.length > 4) {
@@ -89,13 +194,26 @@ function get_valid_words2(words_json, required='', optional='') {
             }
         }
     });
+
+    console.log(validWords);
+    return true;
+}
+
+function initialize_game(words_json, required='', optional='', excl='') {
+    if (excl) {
+        excl = new Set(JSON.parse(atob(excl)));
+    } else {
+        excl=new Set();
+    }
+    get_valid_words(words_json, required=required, optional=optional, excl=excl);
     initialize_letters();
     initialize_score();
-    console.log(validWords);
 }
 
 function initialize_score(){
   document.getElementById("maxscore").innerHTML = String(maxscore);
+  // Initialize the number of words
+  document.getElementById("totalWords").innerHTML = String(validWords.length);
 }
 //Creates the hexagon grid of 7 letters with middle letter as special color
 function initialize_letters(){
@@ -253,7 +371,7 @@ function submitWord(){
     var l = tryword.innerHTML.length;
     if(isPangram){
       rightInput("#pangram");
-      showPoints(17);
+      showPoints(l + 7);
     }else if(l < 5){
       rightInput("#good");
       showPoints(1);
@@ -327,9 +445,8 @@ function calculateWordScore(input, isPangram) {
   let returnScore = 1;
   if(len > 4) {
     if(isPangram) {
-      returnScore = 17;
-
-    }else{
+      returnScore = len + 7;
+    } else {
       returnScore = len;
     }
   }
@@ -353,12 +470,6 @@ function checkPangram(input) {
   }
   console.log("isPangram?: " + containsAllLetters);
   return containsAllLetters;
-
-  // console.log(input.value);
-  // if(input==pangram){
-  //  return true;
-  // }
- return false;
 }
 
 function checkIncorrectLetters(input) {
