@@ -103,6 +103,11 @@ function makeValidWords() {
 }
 
 function create_results(words_json, required='', optional='') {
+    // reset the global variables
+    validWords = [];
+    maxscore = 0;
+    letters = [];
+    // Get the valid words
     var ret = get_valid_words(words_json, required, optional);
     if (!ret) {
         return false;
