@@ -1,5 +1,9 @@
-# spelling_bee
+# Hexagon Lexicon
 
+### Overview
+A word-search game on a hexagonal grid. https://crosswordnexus.com/hexagon_lexicon
+
+Original notes below
 ### Project Origin
 This project is based off of NYT's [Spelling Bee Puzzles](https://www.nytimes.com/puzzles/spelling-bee).
 <br>You must have NYT puzzle membership to play the game on New York Times.
