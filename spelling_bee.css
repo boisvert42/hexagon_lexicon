@@ -1,19 +1,20 @@
 * {
     margin: 0;
     padding: 0;
-  }
-  body {
+}
+
+body {
     align-content:center;
     vertical-align:center;
     display:flex;
     flex-direction: column;
     justify-content:center;
-  }
+}
 
-  .container {
+.container {
     display:flex;
     justify-content:center;
-  }
+}
 
   #scoreboard{
     flex-direction:column;
@@ -35,7 +36,7 @@
     font-family: 'Open Sans', sans-serif;
     font-size: 1.5rem;
     font-weight: 100;
-    height:6vw;
+    height:4vw;
     color: rgb(255, 187, 0);
 
   }
@@ -52,6 +53,11 @@ h1 {
   margin-bottom:1vhpx;
   font-size: 1.5rem;
   font-family: 'Roboto Slab', serif;
+}
+
+#build_it {
+    text-align: center;
+    font-size: 0.8em;
 }
 
 .scoreText {
