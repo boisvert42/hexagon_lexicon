@@ -1,4 +1,6 @@
-These files have been explicitly placed in the Public Domain by Alan Beale.
+The Python script here is released under the Apache 2.0 license.
+
+These text files have been explicitly placed in the Public Domain by Alan Beale.
 
 2of12inf.txt is available at http://wordlist.aspell.net/12dicts-readme/#2of12inf
 
