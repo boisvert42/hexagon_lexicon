@@ -41,6 +41,7 @@
     -webkit-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
         -ms-transform: rotate3d(0,0,1,-60deg) skewY(30deg);
             transform: rotate3d(0,0,1,-60deg) skewY(30deg);
+    text-transform: uppercase;
   }
   .hexIn * {
     position: absolute;
