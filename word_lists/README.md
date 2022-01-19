@@ -1,7 +1,9 @@
 The Python script here is released under the Apache 2.0 license.
 
-The text files have been explicitly placed in the Public Domain by Alan Beale.
+cel.txt is released under the MIT License.
+https://github.com/Fj00/CEL/
 
+The other text files have been explicitly placed in the Public Domain by Alan Beale.
 2of12inf.txt is available at http://wordlist.aspell.net/12dicts-readme/#2of12inf
 
 The "profane" and "offensive" word lists come from SCOWL
