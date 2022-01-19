@@ -67,6 +67,7 @@ MIN_WORDS = 20
 MAX_WORDS = 50
 ctr = 0
 good_starters = set()
+print(f'Number of isograms: {len(isograms)}')
 for word in isograms:
     for required in word:
         optional = word.replace(required, '')
