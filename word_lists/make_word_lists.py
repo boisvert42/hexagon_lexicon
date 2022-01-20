@@ -70,7 +70,7 @@ good_starters = set()
 print(f'Number of isograms: {len(isograms)}')
 for word in isograms:
     for required in word:
-        optional = word.replace(required, '')
+        optional = ''.join(set(word.replace(required, '')))
         possibles = possible_words(required, optional, words)
         if len(possibles) >= MIN_WORDS and len(possibles) <= MAX_WORDS:
             good_starters.add((required, optional))
