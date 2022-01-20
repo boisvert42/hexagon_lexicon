@@ -41,6 +41,7 @@ function get_todays_starter(starters) {
     const rnd = kindaRandom(todayAsInt);
     // Grab a random starter from this
     var starter = starters[Math.floor(rnd*starters.length)];
+    console.log(starter);
     return starter;
 }
 
@@ -173,6 +174,7 @@ function get_valid_words(words_json, required='', optional='', excl=new Set()) {
         var starter = get_todays_starter(starters);
         required = starter[0];
         optional = starter[1];
+        optional = Array.from(new Set(optional)).join('');
     }
     // populate the "letters" global variable
     for (var i=0; i<6; i++) {
