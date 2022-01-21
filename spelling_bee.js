@@ -323,10 +323,13 @@ function wrongInput(selector){
   $(selector).fadeIn(1000);
   $(selector).fadeOut(500);
   $("#cursor").hide();
-  $( "#testword" ).effect("shake", {times:2.5}, 450, function(){
+  $("#testword").css("color", "red");
+  $( "#testword" ).fadeOut( "slow", function() {
       clearInput();
       $("#cursor").show();
-    } );
+      $("#testword").css("color", "#8080");
+      $( "#testword" ).show();
+  });
 
 }
 

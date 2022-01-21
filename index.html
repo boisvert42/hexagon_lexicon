@@ -20,49 +20,58 @@
           <a href="build_your_own.html">[Make your own!]</a>
         </p>
 
-        <!-- NOTIFICATIONS -->
-        <div class="container" style="height:40px; align-items:center;">
-          <div>
-            <p id="too-short" class="notifications">Too Short</p>
-            <p id="good" class="notifications">Good! <span class="points"></span></p>
-            <p id="great" class="notifications">Great! <span class="points"></span></p>
-            <p id="amazing" class="notifications">Amazing! <span class="points"></span></p>
-            <p id="pangram" class="notifications">Pangram! <span class="points"></span></p>
-            <p id="already-found" class="notifications">Already Found</p>
-            <p id="invalid-word" class="notifications">Invalid Word</p>
-            <p id="miss-center" class="notifications">Missing Center Letter</p>
-          </div>
+        <!-- Global flex container -->
+        <div id="main-flex-container">
+          <div id="game-container">
 
-        </div>
-
-        <!-- INPUT WORD -->
-        <div class="cursor">
-            <p id="inputword" style="display:flex;"> <span id="testword"></span><span id="cursor">|</span></p>
-        </div>
-        <!-- <div class="cursor" style="height:40px; text-align:center; display:flex-inline; justify-content:center; margin-bottom:360px;"> -->
-
-        <!-- HEXAGON GRID -->
-          <!--<div id="loading">Loading ...</div>-->
-          <div id="divHexGrid">
-            <ul id="hexGrid"></ul>
-
-            <div class="button_container">
-              <button id="submit_button" type="button" class="button" onclick="submitWord()">Enter</button>
-              <button id="shuffle_button" type="button" class="button" onclick="shuffleLetters()">
-                <img src="shuffle_icon.png" style="width:1.2em">
-
-              </button>
-              <button id="delete_button" type="button" class="button" onclick="deleteLetter()">Delete</button>
-                <!--<i style="align-self:center;"></i>-->
+            <!-- NOTIFICATIONS -->
+            <div class="container" style="height:40px; align-items:center;">
+              <div>
+                <p id="too-short" class="notifications">Too Short</p>
+                <p id="good" class="notifications">Good! <span class="points"></span></p>
+                <p id="great" class="notifications">Great! <span class="points"></span></p>
+                <p id="amazing" class="notifications">Amazing! <span class="points"></span></p>
+                <p id="pangram" class="notifications">Pangram! <span class="points"></span></p>
+                <p id="already-found" class="notifications">Already Found</p>
+                <p id="invalid-word" class="notifications">Invalid Word</p>
+                <p id="miss-center" class="notifications">Missing Center Letter</p>
+              </div>
 
             </div>
-        </div>
-        <div class="container" style="height:400px; justify-content:normal;" id="scoreboard">
-              <div class="scoreText" style="margin-bottom:8px;">You have found <span id="numfound">0</span>/<span id="totalWords">0</span> word(s).</div>
-              <div class="scoreText" style="margin-bottom:8px;">Score: <span id="score">0</span>/<span id="maxscore">0</span>.</div>
-              <div style=" font-family: 'Open Sans', sans-serif; align-self:center; font-size: 15px; font-style:bold;  text-decoration: underline;">Words Discovered</div>
-              <div id="discoveredText" >
-              </div>
+
+            <!-- INPUT WORD -->
+            <div class="cursor">
+                <p id="inputword"> <span id="testword"></span><span id="cursor">|</span></p>
+            </div>
+            <!-- <div class="cursor" style="height:40px; text-align:center; display:flex-inline; justify-content:center; margin-bottom:360px;"> -->
+
+            <!-- HEXAGON GRID -->
+              <!--<div id="loading">Loading ...</div>-->
+              <div id="divHexGrid">
+                <ul id="hexGrid"></ul>
+
+                <div class="button_container">
+                  <button id="submit_button" type="button" class="button" onclick="submitWord()">Enter</button>
+                  <button id="shuffle_button" type="button" class="button" onclick="shuffleLetters()">
+                    <img src="shuffle_icon.png" style="width:1.2em">
+
+                  </button>
+                  <button id="delete_button" type="button" class="button" onclick="deleteLetter()">Delete</button>
+                    <!--<i style="align-self:center;"></i>-->
+
+                </div>
+            </div>
+          </div>
+
+          <div id="scoreboard-container">
+            <div class="container" style="height:400px; justify-content:normal;" id="scoreboard">
+                  <div class="scoreText" style="margin-bottom:8px;">You have found <span id="numfound">0</span>/<span id="totalWords">0</span> word(s).</div>
+                  <div class="scoreText" style="margin-bottom:8px;">Score: <span id="score">0</span>/<span id="maxscore">0</span>.</div>
+                  <div style=" font-family: 'Open Sans', sans-serif; align-self:center; font-size: 15px; font-style:bold;  text-decoration: underline;">Words Discovered</div>
+                  <div id="discoveredText" >
+                  </div>
+            </div>
+          </div>
         </div>
 
     <script type="text/javascript" src="spelling_bee.js"></script>
