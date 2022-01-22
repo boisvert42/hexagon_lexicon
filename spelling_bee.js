@@ -327,7 +327,7 @@ function wrongInput(selector){
   $( "#testword" ).fadeOut( "slow", function() {
       clearInput();
       $("#cursor").show();
-      $("#testword").css("color", "#8080");
+      $("#testword").css("color", "#808080");
       $( "#testword" ).show();
   });
 
