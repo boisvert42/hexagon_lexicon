@@ -319,7 +319,7 @@ function deleteLetter(){
 }
 
 function wrongInput(selector){
-  $(selector).fadeIn(200);
+  $(selector).fadeIn(500);
   $(selector).fadeOut(500);
   $("#cursor").hide();
   $( "#testword" ).effect("shake", {times:2.5}, 450, function(){
@@ -330,7 +330,7 @@ function wrongInput(selector){
 }
 
 function rightInput(selector){
-  $(selector).fadeIn(200).delay(500).fadeOut(200);
+  $(selector).fadeIn(200).delay(700).fadeOut(200);
 
   clearInput();
 }
