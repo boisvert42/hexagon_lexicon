@@ -13,6 +13,8 @@
 
         <!-- JSZip -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.7.1/jszip.min.js" integrity="sha512-xQBQYt9UcgblF6aCMrwU1NkVA7HCXaSN2oq0so80KO+y68M+n64FOcqgav4igHe6D5ObBLIf68DWv+gfBowczg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!-- DarkReader -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/darkreader/4.9.58/darkreader.js" integrity="sha512-SVegqt9Q4E2cRDZ5alp9NLqLLJEAh6Ske9I/iU37Jiq0fHSFbkIsIbaIGYPcadf1JBLzdxPrkqfH1cpTuBQJvw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     </head>
     <body onkeydown="input_from_keyboard(event)">
         <h1>Hexagon Lexicon</h1>
@@ -92,6 +94,11 @@
         }();
 
         $(document).ready(function () {
+        // enable dark mode if requested
+        if (QueryString.darkmode) {
+            DarkReader.enable();
+        }
+        
         // hide and show relevant sections
         //$('#divHexGrid').hide();
         //$('#loading').show();

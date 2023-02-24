@@ -160,7 +160,6 @@ function get_valid_words(words_json, required='', optional='', excl=new Set()) {
     letters = [];
     validWords = [];
     maxScore = 0;
-    // TODO: read from query parameters to get these values
     if (required && optional) {
         required = required.toLowerCase();
         optional = optional.toLowerCase();
@@ -320,7 +319,7 @@ function deleteLetter(){
 }
 
 function wrongInput(selector){
-  $(selector).fadeIn(1000);
+  $(selector).fadeIn(500);
   $(selector).fadeOut(500);
   $("#cursor").hide();
   $( "#testword" ).effect("shake", {times:2.5}, 450, function(){
@@ -331,7 +330,7 @@ function wrongInput(selector){
 }
 
 function rightInput(selector){
-  $(selector).fadeIn(1500).delay(500).fadeOut(1500);
+  $(selector).fadeIn(200).delay(700).fadeOut(200);
 
   clearInput();
 }
@@ -430,6 +429,11 @@ function showDiscoveredWord(input){
         var listword = document.createElement("LI");
         var pword = document.createElement("P");
         pword.innerHTML = discoveredWords[w];
+        // TODO: add a "bold" class if this word is a pangram
+        // use the checkPangram function
+        if (checkPangram(discoveredWords[w])) {
+            pword.style.fontWeight = "bold";
+        }
         listword.appendChild(pword);
         list.appendChild(listword);
         w++;
@@ -475,7 +479,7 @@ function checkPangram(input) {
   if(containsCount == 7) {
     containsAllLetters = true;
   }
-  console.log("isPangram?: " + containsAllLetters);
+  //console.log("isPangram?: " + containsAllLetters);
   return containsAllLetters;
 }
 
@@ -499,10 +503,12 @@ function input_from_keyboard(event) {
 
   if(event.keyCode == 13) {
     submitWord();
+    event.preventDefault();
   }
 
   if(event.keyCode == 8) {
     deleteLetter();
+    preventDefault();
   }
 
   //validation for just alphabet letters input
