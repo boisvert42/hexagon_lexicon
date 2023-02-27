@@ -19,3 +19,7 @@ The file "offensive.1" contains extremely offensive racial slurs which
 should generally not be used.  The file "offensive.2" contains
 offensive racial slurs which should, also, in general, not be used but
 don't have the stigma in modern society as those in "offensive.1".
+
+badwords.txt is a modified version of 
+https://github.com/DivineOmega/is_offensive/blob/master/resources/BadWords.json
+released under the LGPL-3.0 license.
