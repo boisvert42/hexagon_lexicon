@@ -39,11 +39,14 @@ words = set()
 with open(WORD_LIST_FILE, 'r') as fid:
     for line in fid:
         line = line.strip()
-        if line.isalpha():
+        # we only need words ok for this game
+        # specifically, length at least 4
+        # and distinct letters at most 7
+        if line.isalpha() and len(line) >= 4 and len(set(line)) <= 7:
             words.add(line)
 
 # Loop through the offensive word lists
-wordlists_to_remove = ['offensive.1', 'offensive.2', 'profane.1', 'profane.3']
+wordlists_to_remove = ['offensive.1', 'offensive.2', 'profane.1', 'profane.3', 'badwords.txt']
 for filename in wordlists_to_remove:
     with open(filename, 'r') as fid:
         for line in fid:
