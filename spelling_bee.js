@@ -33,9 +33,25 @@ function is_pangram(word) {
     return (new Set(word).size == 7);
 }
 
+// helper function to turn a date to YYYYMMDD format
+function formatDate(date) {
+    var d = new Date(date),
+        month = '' + (d.getMonth() + 1),
+        day = '' + d.getDate(),
+        year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('');
+}
+
 function get_todays_starter(starters) {
     // Get today's date as an integer
-    const todaysDate = new Date().toJSON().slice(0,10).replace(/-/g,'');
+    const today = new Date();
+    const todaysDate = formatDate(today);
     const todayAsInt = Number(todaysDate);
     // Create a pseudo-random number from this date
     const rnd = kindaRandom(todayAsInt);
