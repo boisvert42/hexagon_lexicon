@@ -8,6 +8,9 @@ import json
 import os
 import zipfile
 
+import lemminflect
+import itertools
+
 WORD_LIST_FILE = 'cel.txt' # '2of12inf.txt'
 
 def sort_string(s):
@@ -42,7 +45,7 @@ with open(WORD_LIST_FILE, 'r') as fid:
         # we only need words ok for this game
         # specifically, length at least 4
         # and distinct letters at most 7
-        if line.isalpha() and len(line) >= 4 and len(set(line)) <= 7:
+        if line.isalpha() and len(line) >= 4 and len(set(line)) <= 7 and line.islower():
             words.add(line)
 
 # Loop through the offensive word lists
@@ -63,6 +66,18 @@ isograms = set()
 for word in words:
     if len(word) >= 7 and len(word) <= 10 and len(set(word)) == 7:
         isograms.add(sort_string(word))
+        
+#%% Add inflected forms (if necessary)
+ADD_INFLECTED_FORMS = False
+if ADD_INFLECTED_FORMS:
+    inflected_words = set()
+    for word in words:
+    	infl = lemminflect.getAllInflections(word)
+    	for word1 in itertools.chain(*infl.values()):
+    		inflected_words.add(word1)
+            
+    inflects = set([w for w in inflected_words if len(w) >= 4 and len(set(w)) <= 7])
+    words = words.union(inflects)
 
 #%% Go through these to determine which required letters are "good"
 # A "good" set is defined as one that makes no less than 20 but no more than 50 words
