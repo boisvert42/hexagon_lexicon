@@ -8,6 +8,9 @@ import json
 import os
 import zipfile
 
+import lemminflect
+import itertools
+
 WORD_LIST_FILE = 'cel.txt' # '2of12inf.txt'
 
 def sort_string(s):
@@ -42,7 +45,7 @@ with open(WORD_LIST_FILE, 'r') as fid:
         # we only need words ok for this game
         # specifically, length at least 4
         # and distinct letters at most 7
-        if line.isalpha() and len(line) >= 4 and len(set(line)) <= 7:
+        if line.isalpha() and len(line) >= 4 and len(set(line)) <= 7 and line.islower():
             words.add(line)
 
 # Loop through the offensive word lists
@@ -55,7 +58,27 @@ for filename in wordlists_to_remove:
                 words.remove(line)
             except:
                 pass
+        
+#%% Add inflected forms (if necessary)
+ADD_INFLECTED_FORMS = False
+if ADD_INFLECTED_FORMS:
+    inflected_words = set()
+    for word in words:
+    	infl = lemminflect.getAllInflections(word)
+    	for word1 in itertools.chain(*infl.values()):
+    		inflected_words.add(word1)
+            
+    # Read in CEL and remove any words that aren't in there
+    cel = set()
+    with open('cel.txt', 'r') as fid:
+        for line in fid:
+            line = line.strip()
+            cel.add(line)
 
+    inflects = set([w for w in inflected_words if len(w) >= 4 and len(set(w)) <= 7])
+    inflects = inflects.intersection(cel)
+    words = words.union(inflects)
+    
 #%% Get the isograms (future pangrams)
 # These are words of length at least 7 (and at most 10?)
 # which have 7 unique letters
