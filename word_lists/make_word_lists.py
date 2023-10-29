@@ -8,10 +8,13 @@ import json
 import os
 import zipfile
 
+import requests
 import lemminflect
 import itertools
 
-WORD_LIST_FILE = 'cel.txt' # '2of12inf.txt'
+from nltk.corpus import brown
+
+WORD_LIST_FILE = 'aspell.txt' # '2of12inf.txt'
 
 def sort_string(s):
     return ''.join(sorted(s))
@@ -35,9 +38,7 @@ def possible_words(required, optional, word_list):
     return words
 
 
-#%%
-
-# Read in the word list
+#%% Read in the word list
 words = set()
 with open(WORD_LIST_FILE, 'r') as fid:
     for line in fid:
@@ -47,8 +48,8 @@ with open(WORD_LIST_FILE, 'r') as fid:
         # and distinct letters at most 7
         if line.isalpha() and len(line) >= 4 and len(set(line)) <= 7 and line.islower():
             words.add(line)
-
-# Loop through the offensive word lists
+            
+#%% Loop through the offensive word lists
 wordlists_to_remove = ['offensive.1', 'offensive.2', 'profane.1', 'profane.3', 'badwords.txt']
 for filename in wordlists_to_remove:
     with open(filename, 'r') as fid:
@@ -78,6 +79,23 @@ if ADD_INFLECTED_FORMS:
     inflects = set([w for w in inflected_words if len(w) >= 4 and len(set(w)) <= 7])
     inflects = inflects.intersection(cel)
     words = words.union(inflects)
+    
+#%% Remove anything not in the scrabble dictionary
+enable_url = 'http://norvig.com/ngrams/enable1.txt'
+r = requests.get(enable_url)
+enable_words = set(r.content.decode('utf-8').split('\n'))
+words = words.intersection(enable_words)
+
+#%% Remove anything below a certain Norvig cutoff
+NORVIG_CUTOFF = 25000
+norvig_url = 'http://norvig.com/ngrams/count_1w.txt'
+r = requests.get(norvig_url)
+norvig_words = set([x.split('\t')[0] for x in r.content.decode('utf-8').split('\n') if x and int(x.split('\t')[-1])>= NORVIG_CUTOFF])
+
+# look at words we're about to exclude
+norvig_exclude_words = words.difference(norvig_words)
+
+words = words.intersection(norvig_words)
     
 #%% Get the isograms (future pangrams)
 # These are words of length at least 7 (and at most 10?)
