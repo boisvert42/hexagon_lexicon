@@ -84,9 +84,6 @@ def get_movie_words(min_freq = 5):
     # Keep only alpha words
     df = df[df["Word"].str.isalpha()]
     
-    # Keep only lowercase words
-    df = df.loc[df['Word'].apply(lambda x: x == x.lower())]
-    
     # Keep only words that match what we want
     df = df[df["Word"].apply(is_hexlex_word)]
     
@@ -94,10 +91,13 @@ def get_movie_words(min_freq = 5):
     df = df.sort_values(by=FREQ_COLUMN, ascending=False).drop_duplicates(subset=["Word"])
     
     # Take only words that pass a threshold
-    top_words = df.loc[df[FREQ_COLUMN] >= min_freq]
+    top_words = df.loc[df[FREQ_COLUMN] >= min_freq].copy()
+    
+    # Make lowercase
+    top_words['word_lower'] = top_words['Word'].apply(lambda x: x.lower())
     
     # Make a set of these
-    movie_words = set(top_words['Word'])
+    movie_words = set(top_words['word_lower'])
     
     return movie_words
 
